@@ -18,10 +18,6 @@ import {
   Info,
   ChevronRight,
   Users,
-  Bot,
-  Send,
-  Loader2,
-  AlertCircle,
   Phone,
 } from "lucide-react";
 
