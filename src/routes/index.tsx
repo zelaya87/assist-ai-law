@@ -46,8 +46,6 @@ type Right = {
   textColor: string;
 };
 
-type Message = { role: "user" | "assistant"; text: string };
-
 function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
@@ -55,46 +53,11 @@ function Index() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRight, setSelectedRight] = useState<Right | null>(null);
 
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: "assistant",
-      text: "Olá! Sou seu assistente jurídico virtual. Como posso ajudar com dúvidas sobre direitos PcD no Brasil?",
-    },
-  ]);
-  const [inputText, setInputText] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isLoading]);
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const handleSendMessage = async () => {
-    if (!inputText.trim() || isLoading) return;
-    const userText = inputText;
-    setMessages((p) => [...p, { role: "user", text: userText }]);
-    setInputText("");
-    setIsLoading(true);
-    // Stub: ative o backend (Lovable Cloud + AI Gateway) para respostas reais.
-    setTimeout(() => {
-      setMessages((p) => [
-        ...p,
-        {
-          role: "assistant",
-          text: "O assistente ainda não está conectado. Ative o Lovable Cloud para habilitar respostas com IA baseadas na LBI.",
-        },
-      ]);
-      setIsLoading(false);
-    }, 600);
-  };
-
   const rightsData: Right[] = [
     {
       id: 1,
