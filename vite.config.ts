@@ -12,6 +12,11 @@ export default defineConfig({
     tanstackStart(),
     nitro({
       preset: 'vercel',
+      vercel: {
+        config: {
+          runtime: 'nodejs24.x',
+        },
+      },
     }),
     viteReact(),
   ],
