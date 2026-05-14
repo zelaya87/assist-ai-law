@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import viteReact from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import tsConfigPaths from 'vite-tsconfig-paths';
-import { nitro } from 'nitro/vite';
+import { nitro } from 'nitropack/vite';
 
 export default defineConfig({
   plugins: [
@@ -12,11 +12,6 @@ export default defineConfig({
     tanstackStart(),
     nitro({
       preset: 'vercel',
-      vercel: {
-        config: {
-          runtime: 'nodejs24.x',
-        },
-      },
     }),
     viteReact(),
   ],
