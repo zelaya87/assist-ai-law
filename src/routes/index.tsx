@@ -18,10 +18,6 @@ import {
   Info,
   ChevronRight,
   Users,
-  Bot,
-  Send,
-  Loader2,
-  AlertCircle,
   Phone,
 } from "lucide-react";
 
@@ -50,8 +46,6 @@ type Right = {
   textColor: string;
 };
 
-type Message = { role: "user" | "assistant"; text: string };
-
 function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
@@ -59,46 +53,11 @@ function Index() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRight, setSelectedRight] = useState<Right | null>(null);
 
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: "assistant",
-      text: "Olá! Sou seu assistente jurídico virtual. Como posso ajudar com dúvidas sobre direitos PcD no Brasil?",
-    },
-  ]);
-  const [inputText, setInputText] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isLoading]);
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const handleSendMessage = async () => {
-    if (!inputText.trim() || isLoading) return;
-    const userText = inputText;
-    setMessages((p) => [...p, { role: "user", text: userText }]);
-    setInputText("");
-    setIsLoading(true);
-    // Stub: ative o backend (Lovable Cloud + AI Gateway) para respostas reais.
-    setTimeout(() => {
-      setMessages((p) => [
-        ...p,
-        {
-          role: "assistant",
-          text: "O assistente ainda não está conectado. Ative o Lovable Cloud para habilitar respostas com IA baseadas na LBI.",
-        },
-      ]);
-      setIsLoading(false);
-    }, 600);
-  };
-
   const rightsData: Right[] = [
     {
       id: 1,
@@ -525,72 +484,6 @@ function Index() {
         </div>
       )}
 
-      {/* Chat */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-4">
-        {isChatOpen && (
-          <div className="w-[360px] max-w-[calc(100vw-3rem)] h-[520px] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden">
-            <div className="bg-indigo-800 text-white px-4 py-3 flex items-center justify-between">
-              <div className="flex items-center gap-2 font-bold text-sm">
-                <Bot className="w-5 h-5" /> Assistente Jurídico
-              </div>
-              <button
-                onClick={() => setIsChatOpen(false)}
-                className="hover:bg-white/10 p-1 rounded-md"
-                aria-label="Fechar chat"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
-              {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={`max-w-[85%] px-3 py-2 rounded-xl text-sm leading-relaxed ${
-                    m.role === "user"
-                      ? "ml-auto bg-indigo-800 text-white rounded-br-none"
-                      : "bg-white border border-slate-200 text-slate-800 rounded-bl-none"
-                  }`}
-                >
-                  {m.text}
-                </div>
-              ))}
-              {isLoading && (
-                <div className="flex items-center gap-2 text-slate-500 text-xs">
-                  <Loader2 className="w-4 h-4 animate-spin" /> Consultando a legislação...
-                </div>
-              )}
-              <div ref={chatEndRef} />
-            </div>
-            <div className="p-3 border-t border-slate-200 flex gap-2">
-              <input
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                placeholder="Ex: Como funciona a Lei de Cotas?"
-                className="flex-1 min-w-0 bg-slate-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-800 font-medium"
-              />
-              <button
-                onClick={handleSendMessage}
-                disabled={isLoading}
-                className="bg-indigo-800 text-white p-2 rounded-lg hover:bg-indigo-900 disabled:opacity-50"
-                aria-label="Enviar"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="px-3 py-2 bg-amber-50 border-t border-amber-200 text-amber-800 text-xs flex items-center gap-2">
-              <AlertCircle className="w-3 h-3" /> Conecte o backend para ativar a IA real.
-            </div>
-          </div>
-        )}
-        <button
-          onClick={() => setIsChatOpen(!isChatOpen)}
-          className="w-16 h-16 bg-indigo-800 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all border-2 border-white"
-          aria-label="Abrir assistente"
-        >
-          {isChatOpen ? <X className="w-6 h-6" /> : <Bot className="w-7 h-7" />}
-        </button>
-      </div>
     </div>
   );
 }
